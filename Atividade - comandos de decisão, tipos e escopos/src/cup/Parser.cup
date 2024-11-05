@@ -1,0 +1,136 @@
+// Especificação do parser CUP
+package parser;
+import java_cup.runtime.*;
+import java.util.HashMap;
+import ast.expr.*;
+import ast.Interpreter;
+import ast.command.*;
+
+// Definição dos terminais
+terminal            SEMI, PLUS, MINUS, TIMES, DIVIDE, MOD, PRINT;
+terminal            UMINUS, LPAREN, RPAREN, ASSIGN, SIN, COS, EXP;
+terminal            GT, IF, WHILE;
+terminal Double     NUMBER;
+terminal String     ID;
+terminal Double     PI;
+
+// Definição dos não-terminais
+non terminal            program, command_list, command_part;
+non terminal Expr       expr;
+non terminal BoolExpr   bool_expr;
+non terminal Command    command;
+non terminal PrintCommand       print_command;
+non terminal AssignmentCommand  assignment_command;
+non terminal IfCommand          if_command;
+non terminal WhileCommand       while_command;
+
+// Precedência e associatividade dos operadores
+precedence nonassoc IF;
+precedence nonassoc ASSIGN;
+precedence left GT;
+precedence left PLUS, MINUS;
+precedence left TIMES, DIVIDE, MOD;
+precedence right EXP;
+precedence left UMINUS;
+
+
+// Regras da gramática
+program ::= command_list
+    ;
+
+
+command_list ::= command_part command_list
+    | command_part
+    ;
+
+command_part ::= command:c
+        {:
+            c.accept(new Interpreter());
+        :}
+    | error
+    ;
+
+command ::= assignment_command:a SEMI
+        {:
+            RESULT = a;
+        :}
+    | print_command:p SEMI
+        {: 
+            RESULT = p;
+        :}
+    | if_command:ifc
+        {:
+            RESULT = ifc;
+        :}
+    | while_command:w
+        {:
+            RESULT = w;
+        :}
+    ;
+
+while_command ::= WHILE LPAREN bool_expr:e RPAREN command:c
+        {:
+            RESULT = new WhileCommand(e, c);
+        :}
+    ;
+
+assignment_command ::= ID:id ASSIGN expr:e
+        {:
+            RESULT = new AssignmentCommand(id, e);
+        :}
+    ;
+
+print_command ::= PRINT LPAREN expr:e RPAREN
+        {:
+            RESULT = new PrintCommand(e);
+        :}
+    ;
+
+if_command ::= IF LPAREN bool_expr:e RPAREN command:c
+        {:
+            RESULT = new IfCommand(e, c);
+        :} 
+    ;
+
+expr ::= expr:e1 PLUS expr:e2
+        {: RESULT = new SumExpr(e1, e2); :}
+    | expr:e1 MINUS expr:e2
+        {: RESULT = new SubExpr(e1, e2); :}
+    | expr:e1 TIMES expr:e2
+        {: RESULT = new MulExpr(e1, e2);; :}
+    | expr:e1 DIVIDE expr:e2
+        {: RESULT = new DivExpr(e1, e2); :}
+    | expr:e1 MOD expr:e2
+        {: RESULT = new ModExpr(e1, e2); :}
+    | expr:e1 EXP expr:e2
+            {: RESULT = new ExpExpr(e1, e2); :}
+    | MINUS expr:e 
+        {: RESULT = new NegatedExpr(e); :} %prec UMINUS
+    | LPAREN expr:e RPAREN 
+        {: RESULT = e; :}
+    | NUMBER:n 
+        {: RESULT = new DoubleConstExpr(n); :}
+    | ID:id 
+        {: 
+            RESULT = new IdExpr(id);
+        :}
+    | SIN LPAREN expr:e RPAREN 
+        {:
+            RESULT = new SinExpr(e);
+        :}
+    | COS LPAREN expr:e RPAREN
+        {:
+            RESULT = new CosExpr(e);
+        :}
+    | PI:pi 
+        {: 
+            RESULT = new PiExpr(pi);
+        :}
+    ;
+
+bool_expr ::= expr:e1 GT expr:e2
+        {:
+            RESULT = new GTExpr(e1, e2);
+        :}
+    ;
+
