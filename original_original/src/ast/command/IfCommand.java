@@ -17,5 +17,4 @@ public class IfCommand implements Command {
     public void accept(CodeVisitor v) {
         v.visit(this);
     }
-
 }

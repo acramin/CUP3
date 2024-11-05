@@ -4,6 +4,7 @@ import ast.expr.SumExpr;
 import ast.expr.MulExpr;
 import ast.expr.SubExpr;
 import ast.command.AssignmentCommand;
+import ast.command.CommandList;
 import ast.command.IfCommand;
 import ast.command.PrintCommand;
 import ast.command.WhileCommand;
@@ -52,4 +53,6 @@ public interface CodeVisitor {
     public void visit(IfCommand ifc);
 
     public void visit(WhileCommand w);
+
+    public void visit(CommandList e);
 }

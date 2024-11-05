@@ -10,19 +10,23 @@ import ast.command.*;
 terminal            SEMI, PLUS, MINUS, TIMES, DIVIDE, MOD, PRINT;
 terminal            UMINUS, LPAREN, RPAREN, ASSIGN, SIN, COS, EXP;
 terminal            GT, IF, WHILE, ELSE;
+terminal            LBRACE, RBRACE;
 terminal Double     NUMBER;
 terminal String     ID;
 terminal Double     PI;
 
 // Definição dos não-terminais
-non terminal            program, command_list, command_part;
+non terminal            program;
 non terminal Expr       expr;
 non terminal BoolExpr   bool_expr;
 non terminal Command    command;
+non terminal Command    command_part;
 non terminal PrintCommand       print_command;
 non terminal AssignmentCommand  assignment_command;
 non terminal IfCommand          if_command;
 non terminal WhileCommand       while_command;
+non terminal CommandList        command_list;
+non terminal CommandList        command_block;
 
 // Precedência e associatividade dos operadores
 precedence nonassoc ELSE;
@@ -36,19 +40,28 @@ precedence left UMINUS;
 
 
 // Regras da gramática
-program ::= command_list
+program ::= command_list:cl
+        {:
+            cl.accept(new Interpreter());
+        :}
+        | error
     ;
 
 
-command_list ::= command_part command_list
-    | command_part
+command_list ::= command_part:p command_list:c
+        {:
+            RESULT = new CommandList(p, c);
+        :}
+    | command_part: p
+        {:
+            RESULT = new CommandList(p);
+        :}
     ;
 
 command_part ::= command:c
         {:
-            c.accept(new Interpreter());
+            RESULT = c;
         :}
-    | error
     ;
 
 command ::= assignment_command:a SEMI
@@ -66,6 +79,16 @@ command ::= assignment_command:a SEMI
     | while_command:w
         {:
             RESULT = w;
+        :}
+    | command_block:cb
+        {:
+            RESULT = cb;
+        :}
+    ;
+
+command_block ::= LBRACE command_list:cl RBRACE
+        {:
+            RESULT = cl;
         :}
     ;
 
@@ -91,7 +114,7 @@ if_command ::= IF LPAREN bool_expr:e RPAREN command:c
         {:
             RESULT = new IfCommand(e, c, null);
         :} 
-        | IF LPAREN bool_expr:e RPAREN command:c ELSE command:c2
+    | IF LPAREN bool_expr:e RPAREN command:c ELSE command:c2
         {:
             RESULT = new IfCommand(e, c, c2);
         :}

@@ -3,6 +3,7 @@ package ast;
 import java.util.HashMap;
 
 import ast.command.AssignmentCommand;
+import ast.command.CommandList;
 import ast.command.IfCommand;
 import ast.command.PrintCommand;
 import ast.command.WhileCommand;
@@ -116,8 +117,7 @@ public class Interpreter implements CodeVisitor {
             if( ifc.elseCommand != null ) {
                 ifc.elseCommand.accept(this);
             }
-        }
-        
+        }  
     }
 
     @Override
@@ -127,5 +127,14 @@ public class Interpreter implements CodeVisitor {
             w.command.accept(this);
             b = w.boolExpr.accept(this);
         }
+    }
+
+    @Override
+    public void visit(CommandList commandList) {
+        CommandList cl = commandList;
+        do {
+            cl.command.accept(this);
+            cl = cl.commandList;
+        } while (cl != null);
     }
 }
