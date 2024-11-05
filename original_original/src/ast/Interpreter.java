@@ -10,9 +10,12 @@ import ast.command.WhileCommand;
 import ast.expr.CosExpr;
 import ast.expr.DivExpr;
 import ast.expr.IdExpr;
+import ast.expr.LEExpr;
+import ast.expr.LTExpr;
 import ast.expr.ModExpr;
 import ast.expr.DoubleConstExpr;
 import ast.expr.ExpExpr;
+import ast.expr.GEExpr;
 import ast.expr.GTExpr;
 import ast.expr.MulExpr;
 import ast.expr.NegatedExpr;
@@ -95,6 +98,42 @@ public class Interpreter implements CodeVisitor {
         Double v1 = e.e1.accept(this);
         Double v2 = e.e2.accept(this);
         return v1 > v2;
+    }
+
+    @Override
+    public Boolean visit(LTExpr e) {
+        Double v1 = e.e1.accept(this);
+        Double v2 = e.e2.accept(this);
+        return v1 < v2;
+    }
+
+    @Override
+    public Boolean visit(GEExpr e) {
+        Double v1 = e.e1.accept(this);
+        Double v2 = e.e2.accept(this);
+        return v1 >= v2;
+    }
+
+
+    @Override
+    public Boolean visit(LEExpr e) {
+        Double v1 = e.e1.accept(this);
+        Double v2 = e.e2.accept(this);
+        return v1 <= v2;
+    }
+
+    @Override
+    public Boolean visit(ast.expr.EQExpr e) {
+        Double v1 = e.e1.accept(this);
+        Double v2 = e.e2.accept(this);
+        return v1.equals(v2);
+    }
+
+    @Override
+    public Boolean visit(ast.expr.NEExpr e) {
+        Double v1 = e.e1.accept(this);
+        Double v2 = e.e2.accept(this);
+        return !v1.equals(v2);
     }
 
     @Override

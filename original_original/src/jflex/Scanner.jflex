@@ -43,6 +43,11 @@ identifier = [A-Za-z][A-Za-z0-9]*
 "}"         { return symbol(sym.RBRACE); }
 "="         { return symbol(sym.ASSIGN); }
 ">"         { return symbol(sym.GT); }
+"<"         { return symbol(sym.LT); }
+">="        { return symbol(sym.GE); }
+"<="        { return symbol(sym.LE); }
+"=="        { return symbol(sym.EQ); }
+"!="        { return symbol(sym.NE); }
 "if"        { return symbol(sym.IF); }
 "else"      { return symbol(sym.ELSE); }
 "while"     { return symbol(sym.WHILE); }
