@@ -37,11 +37,14 @@ identifier = [A-Za-z][A-Za-z0-9]*
 "*"         { return symbol(sym.TIMES); }
 "/"         { return symbol(sym.DIVIDE); }
 "%"         { return symbol(sym.MOD); }
+"{"        { return symbol(sym.LBRACE); }
+"}"        { return symbol(sym.RBRACE); }
 "("         { return symbol(sym.LPAREN); }
 ")"         { return symbol(sym.RPAREN); }
 "="         { return symbol(sym.ASSIGN); }
 ">"         { return symbol(sym.GT); }
 "if"        { return symbol(sym.IF); }
+"else"      { return symbol(sym.ELSE); }
 "while"     { return symbol(sym.WHILE); }
 "sin"       { return symbol(sym.SIN); }
 "cos"       { return symbol(sym.COS); }

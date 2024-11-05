@@ -112,6 +112,10 @@ public class Interpreter implements CodeVisitor {
     public void visit(IfCommand ifc) {
         if( ifc.boolExpr.accept(this) ){
             ifc.command.accept(this);
+        } else {
+            if( ifc.elseCommand != null ) {
+                ifc.elseCommand.accept(this);
+            }
         }
         
     }

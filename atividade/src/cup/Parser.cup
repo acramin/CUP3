@@ -9,7 +9,7 @@ import ast.command.*;
 // Definição dos terminais
 terminal            SEMI, PLUS, MINUS, TIMES, DIVIDE, MOD, PRINT;
 terminal            UMINUS, LPAREN, RPAREN, ASSIGN, SIN, COS, EXP;
-terminal            GT, IF, WHILE;
+terminal            GT, IF, WHILE, ELSE;
 terminal Double     NUMBER;
 terminal String     ID;
 terminal Double     PI;
@@ -25,6 +25,7 @@ non terminal IfCommand          if_command;
 non terminal WhileCommand       while_command;
 
 // Precedência e associatividade dos operadores
+precedence nonassoc ELSE;
 precedence nonassoc IF;
 precedence nonassoc ASSIGN;
 precedence left GT;
@@ -88,8 +89,12 @@ print_command ::= PRINT LPAREN expr:e RPAREN
 
 if_command ::= IF LPAREN bool_expr:e RPAREN command:c
         {:
-            RESULT = new IfCommand(e, c);
+            RESULT = new IfCommand(e, c, null);
         :} 
+        | IF LPAREN bool_expr:e RPAREN command:c ELSE command:c2
+        {:
+            RESULT = new IfCommand(e, c, c2);
+        :}
     ;
 
 expr ::= expr:e1 PLUS expr:e2
