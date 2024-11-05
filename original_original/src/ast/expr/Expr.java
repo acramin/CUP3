@@ -4,6 +4,6 @@ import ast.CodeVisitor;
 
 public interface Expr {
 
-    public Double accept(CodeVisitor v);
+    public Object accept(CodeVisitor v);
     
 }

@@ -21,6 +21,7 @@ import ast.expr.MulExpr;
 import ast.expr.NegatedExpr;
 import ast.expr.PiExpr;
 import ast.expr.SinExpr;
+import ast.expr.StringConstExpr;
 import ast.expr.SubExpr;
 import ast.expr.SumExpr;
 
@@ -30,22 +31,22 @@ public class Interpreter implements CodeVisitor {
 
     @Override
     public Double visit(SumExpr e) {
-        return e.e1.accept(this) + e.e2.accept(this);
+        return (Double) e.e1.accept(this) + (Double) e.e2.accept(this);
     }
 
     @Override
     public Double visit(SubExpr e) {
-        return e.e1.accept(this) - e.e2.accept(this);
+        return (Double) e.e1.accept(this) - (Double) e.e2.accept(this);
     }
 
     @Override
     public Double visit(MulExpr e) {
-        return e.e1.accept(this) * e.e2.accept(this);
+        return (Double) e.e1.accept(this) * (Double) e.e2.accept(this);
     }
 
     @Override
     public Double visit(DivExpr e) {
-        return e.e1.accept(this) / e.e2.accept(this);
+        return (Double) e.e1.accept(this) / (Double) e.e2.accept(this);
     }
 
     @Override
@@ -64,28 +65,33 @@ public class Interpreter implements CodeVisitor {
     }
 
     @Override
+    public String visit(StringConstExpr e) {
+        return e.value;
+    }
+
+    @Override
     public Double visit(NegatedExpr e) {
-        return -e.expr.accept(this);
+        return -(Double) e.expr.accept(this);
     }
 
     @Override
     public Double visit(ModExpr e) {
-        return e.e1.accept(this) % e.e2.accept(this);
+        return (Double) e.e1.accept(this) % (Double) e.e2.accept(this);
     }
 
     @Override
     public Double visit(ExpExpr e) {
-        return Math.pow(e.e1.accept(this), e.e2.accept(this));
+        return Math.pow((Double)e.e1.accept(this), (Double)e.e2.accept(this));
     }
 
     @Override
     public Double visit(SinExpr e) {
-        return Math.sin(e.expr.accept(this));
+        return Math.sin((Double)e.expr.accept(this));
     }
 
     @Override
     public Double visit(CosExpr e) {
-        return Math.cos(e.expr.accept(this));
+        return Math.cos((Double)e.expr.accept(this));
     }
 
     @Override
@@ -95,44 +101,44 @@ public class Interpreter implements CodeVisitor {
 
     @Override
     public Boolean visit(GTExpr e) {
-        Double v1 = e.e1.accept(this);
-        Double v2 = e.e2.accept(this);
+        Double v1 = (Double) e.e1.accept(this);
+        Double v2 = (Double) e.e2.accept(this);
         return v1 > v2;
     }
 
     @Override
     public Boolean visit(LTExpr e) {
-        Double v1 = e.e1.accept(this);
-        Double v2 = e.e2.accept(this);
+        Double v1 = (Double) e.e1.accept(this);
+        Double v2 = (Double) e.e2.accept(this);
         return v1 < v2;
     }
 
     @Override
     public Boolean visit(GEExpr e) {
-        Double v1 = e.e1.accept(this);
-        Double v2 = e.e2.accept(this);
+        Double v1 = (Double) e.e1.accept(this);
+        Double v2 = (Double) e.e2.accept(this);
         return v1 >= v2;
     }
 
 
     @Override
     public Boolean visit(LEExpr e) {
-        Double v1 = e.e1.accept(this);
-        Double v2 = e.e2.accept(this);
+        Double v1 = (Double) e.e1.accept(this);
+        Double v2 = (Double) e.e2.accept(this);
         return v1 <= v2;
     }
 
     @Override
     public Boolean visit(ast.expr.EQExpr e) {
-        Double v1 = e.e1.accept(this);
-        Double v2 = e.e2.accept(this);
+        Double v1 = (Double) e.e1.accept(this);
+        Double v2 = (Double) e.e2.accept(this);
         return v1.equals(v2);
     }
 
     @Override
     public Boolean visit(ast.expr.NEExpr e) {
-        Double v1 = e.e1.accept(this);
-        Double v2 = e.e2.accept(this);
+        Double v1 = (Double) e.e1.accept(this);
+        Double v2 = (Double) e.e2.accept(this);
         return !v1.equals(v2);
     }
 
@@ -143,7 +149,7 @@ public class Interpreter implements CodeVisitor {
 
     @Override
     public void visit(AssignmentCommand c) {
-        Double value = c.expr.accept(this);
+        Double value = (Double) c.expr.accept(this);
         IdExpr idExpr = new IdExpr(c.id, value);
         Interpreter.symbolTable.put(c.id, idExpr);
     }

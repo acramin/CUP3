@@ -139,6 +139,8 @@ expr ::= expr:e1 PLUS expr:e2
         {: RESULT = e; :}
     | NUMBER:n 
         {: RESULT = new DoubleConstExpr(n); :}
+    | STRING:s 
+        {: RESULT = new StringConstExpr(s); :}
     | ID:id 
         {: 
             RESULT = new IdExpr(id);

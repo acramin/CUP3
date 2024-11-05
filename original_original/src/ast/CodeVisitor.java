@@ -23,8 +23,12 @@ import ast.expr.NegatedExpr;
 import ast.expr.PiExpr;
 import ast.expr.ModExpr;
 import ast.expr.SinExpr;
+import ast.expr.StringConstExpr;
 
 public interface CodeVisitor {
+
+    public String visit(StringConstExpr s);
+
     public Double visit(SumExpr e);
 
     public Double visit(SubExpr e);
