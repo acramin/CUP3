@@ -28,6 +28,7 @@ import java_cup.runtime.*;
 ws = [\ \t\f\r\n]
 number = \d+(\.\d+)?(["E""e"]["+""-"]?\d+)?
 identifier = [A-Za-z][A-Za-z0-9]*
+string = \"([^\"\\\\]*(\\\\.[^\"\\\\]*)*)\"
 
 %%
 ";"         { return symbol(sym.SEMI); }
@@ -57,6 +58,7 @@ identifier = [A-Za-z][A-Za-z0-9]*
 "PI"        { return symbol(sym.PI, Math.PI); }
 {number}    { return symbol(sym.NUMBER, Double.valueOf(yytext())); }
 {identifier} { return symbol(sym.ID, yytext()); }
+{string}    { return symbol(sym.STRING, yytext()); }
 {ws}        {/* Ignore */}
 .           { throw new Error("Simbolo inválido detectado: \"" + yycharat(0) +
               "\" ( linha: " +  yyline + ", coluna: " + yycolumn + ")"); }

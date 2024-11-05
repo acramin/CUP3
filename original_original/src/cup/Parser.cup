@@ -14,6 +14,7 @@ terminal            LBRACE, RBRACE;
 terminal Double     NUMBER;
 terminal String     ID;
 terminal Double     PI;
+terminal String     STRING;
 
 // Definição dos não-terminais
 non terminal            program;

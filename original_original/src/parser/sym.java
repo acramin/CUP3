@@ -27,6 +27,7 @@ public interface sym {
   public static final int ID = 28;
   public static final int LE = 19;
   public static final int EXP = 15;
+  public static final int STRING = 30;
   public static final int NUMBER = 27;
   public static final int EOF = 0;
   public static final int DIVIDE = 6;
@@ -68,7 +69,8 @@ public interface sym {
   "RBRACE",
   "NUMBER",
   "ID",
-  "PI"
+  "PI",
+  "STRING"
   };
 }
 
