@@ -1,5 +1,6 @@
 package ast.command;
 import ast.CodeVisitor;
+//import ast.Interpreter;
 import ast.Interpreter;
 
 public class CommandBlock implements Command {
@@ -10,14 +11,12 @@ public class CommandBlock implements Command {
     }
 
     @Override
-    public void accept(CodeVisitor visitor) {
-        if (visitor instanceof Interpreter) {
-            Interpreter interpreter = (Interpreter) visitor;
+    public void accept(CodeVisitor v) {
+        //v.visit(this);
+        if (v instanceof Interpreter) {
+            Interpreter interpreter = (Interpreter) v;
             interpreter.enterScope(); // Entrar no escopo do bloco
-
-            // Executar cada comando dentro do bloco
-            commands.accept(visitor);
-
+            commands.accept(v); // Executar cada comando dentro do bloco
             interpreter.exitScope(); // Sair do escopo do bloco
         }
     }

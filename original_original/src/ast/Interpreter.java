@@ -63,6 +63,13 @@ public class Interpreter implements CodeVisitor {
         return null; // Variável não encontrada em nenhum escopo
     }
 
+    public void assign(String name, IdExpr value) {
+        if (!scopeStack.isEmpty()) {
+            HashMap<String, IdExpr> currentScope = scopeStack.peek();
+            currentScope.put(name, value);
+        }
+    }
+
     @Override
     public Double visit(IdExpr e) {
         IdExpr idExpr = findInScope(e.name);
@@ -77,12 +84,11 @@ public class Interpreter implements CodeVisitor {
         Double value = c.expr.accept(this);
         IdExpr idExpr = new IdExpr(c.id, value);
         // Adiciona ou atualiza a variável no escopo atual
-        scopeStack.peek().put(c.id, idExpr);
+        assign(c.id, idExpr);
     }
 
     @Override
     public void visit(IfCommand ifc) {
-        //enterScope();
         if (ifc.boolExpr.accept(this)) {
             ifc.command.accept(this);
         } else {
@@ -90,29 +96,24 @@ public class Interpreter implements CodeVisitor {
                 ifc.elseCommand.accept(this);
             }
         }
-        //exitScope();
     }
 
     @Override
     public void visit(WhileCommand w) {
-        //enterScope();
         Boolean b = w.boolExpr.accept(this);
         while (b) {
             w.command.accept(this);
             b = w.boolExpr.accept(this);
         }
-        // exitScope();
     }
 
     @Override
     public void visit(CommandList commandList) {
         CommandList cl = commandList;
-        //enterScope();
         do {
             cl.command.accept(this);
             cl = cl.commandList;
         } while (cl != null);
-        //exitScope();
     }
 
     @Override
@@ -217,4 +218,11 @@ public class Interpreter implements CodeVisitor {
     public void visit(PrintCommand c) {
         System.out.println(">>> " + c.expr.accept(this));
     }
+
+    /*@Override
+    public void visit(ast.command.CommandBlock c) {
+        enterScope();
+        c.accept(this);
+        exitScope();
+    }*/
 }
