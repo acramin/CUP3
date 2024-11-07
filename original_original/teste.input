@@ -3,11 +3,19 @@ x = 10;
 if (x != 4) {
     print(1);
     print(2);
-}
-else {
+} else {
     print(3);
     print(4);
 }
+
+print(x);
+
+{
+    x = 3 ;
+    print(x);
+}
+
+print(x);
 
 while ( x > 0){
     x = x - 1;

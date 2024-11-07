@@ -27,7 +27,7 @@ non terminal AssignmentCommand  assignment_command;
 non terminal IfCommand          if_command;
 non terminal WhileCommand       while_command;
 non terminal CommandList        command_list;
-non terminal CommandList        command_block;
+non terminal CommandBlock        command_block;
 
 // Precedência e associatividade dos operadores
 precedence nonassoc ELSE;
@@ -38,6 +38,7 @@ precedence left PLUS, MINUS;
 precedence left TIMES, DIVIDE, MOD;
 precedence right EXP;
 precedence left UMINUS;
+
 
 
 // Regras da gramática
@@ -87,10 +88,8 @@ command ::= assignment_command:a SEMI
         :}
     ;
 
-command_block ::= LBRACE command_list:cl RBRACE
-        {:
-            RESULT = cl;
-        :}
+command_block ::= LBRACE  command_list:cl RBRACE 
+        {: RESULT = new CommandBlock(cl); :}
     ;
 
 while_command ::= WHILE LPAREN bool_expr:e RPAREN command:c

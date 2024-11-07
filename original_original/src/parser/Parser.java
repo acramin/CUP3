@@ -409,7 +409,7 @@ class CUP$Parser$actions {
               Command RESULT =null;
 		int cbleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int cbright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
-		CommandList cb = (CommandList)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		CommandBlock cb = (CommandBlock)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		
             RESULT = cb;
         
@@ -420,13 +420,11 @@ class CUP$Parser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 11: // command_block ::= LBRACE command_list RBRACE 
             {
-              CommandList RESULT =null;
+              CommandBlock RESULT =null;
 		int clleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
 		int clright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		CommandList cl = (CommandList)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
-		
-            RESULT = cl;
-        
+		 RESULT = new CommandBlock(cl); 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("command_block",10, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
