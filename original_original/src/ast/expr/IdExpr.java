@@ -4,7 +4,7 @@ import ast.CodeVisitor;
 import ast.TypedValue;
 
 public class IdExpr implements Expr {
-    public String name;
+    public int name;
     public TypedValue value;
 
     public IdExpr(String name) {

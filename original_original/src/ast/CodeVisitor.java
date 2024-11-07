@@ -33,7 +33,7 @@ public interface CodeVisitor {
 
     public Double visit(DivExpr e);
 
-    public Double visit(IdExpr e);
+    public TypedValue visit(IdExpr e);
 
     public Double visit(DoubleConstExpr e);
 

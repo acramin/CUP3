@@ -49,7 +49,7 @@ public class Interpreter implements CodeVisitor {
         return null; // Variável não encontrada
     }
 
-    public void assign(String name, TypedValue value) {
+    public void assign(String name, IdExpr value) {
         if (!scopeStack.isEmpty()) {
             HashMap<String, IdExpr> currentScope = scopeStack.peek();
             currentScope.put(name, value);
