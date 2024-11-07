@@ -1,16 +1,17 @@
 package ast.expr;
 
 import ast.CodeVisitor;
+import ast.TypedValue;
 
 public class IdExpr implements Expr {
     public String name;
-    public Double value;
+    public TypedValue value;
 
     public IdExpr(String name) {
-        this(name, 0.0);
+        this(name, null);
     }
 
-    public IdExpr(String name, Double value) {
+    public IdExpr(String name, TypedValue value) {
         this.name = name;
         this.value = value;
     }

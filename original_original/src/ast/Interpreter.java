@@ -23,11 +23,38 @@ import ast.expr.PiExpr;
 import ast.expr.SinExpr;
 import ast.expr.SubExpr;
 import ast.expr.SumExpr;
+import java.util.Stack;
 
 public class Interpreter implements CodeVisitor {
     // symbolTable é a tabela de símbolos
-    private static HashMap<String, IdExpr> symbolTable = new HashMap<>();
+    private static Stack<HashMap<String, IdExpr>> scopeStack = new Stack<>();
 
+    public void enterScope() {
+        scopeStack.push(new HashMap<>());
+    }
+
+    public void exitScope() {
+        if (!scopeStack.isEmpty()) {
+            scopeStack.pop();
+        }
+    }
+
+    public IdExpr lookup(String name) {
+        for (int i = scopeStack.size() - 1; i >= 0; i--) {
+            HashMap<String, IdExpr> scope = scopeStack.get(i);
+            if (scope.containsKey(name)) {
+                return scope.get(name);
+            }
+        }
+        return null; // Variável não encontrada
+    }
+
+    public void assign(String name, TypedValue value) {
+        if (!scopeStack.isEmpty()) {
+            HashMap<String, IdExpr> currentScope = scopeStack.peek();
+            currentScope.put(name, value);
+        }
+    }
     @Override
     public Double visit(SumExpr e) {
         return e.e1.accept(this) + e.e2.accept(this);
@@ -143,9 +170,10 @@ public class Interpreter implements CodeVisitor {
 
     @Override
     public void visit(AssignmentCommand c) {
-        Double value = c.expr.accept(this);
-        IdExpr idExpr = new IdExpr(c.id, value);
-        Interpreter.symbolTable.put(c.id, idExpr);
+        Object result = c.expr.accept(this); // Pode retornar Double ou String
+        TypedValue typedValue = result instanceof Double ? new TypedValue((Double) result) : new TypedValue((String) result);
+        IdExpr idExpr = new IdExpr(c.id, typedValue);
+        assign(c.id, idExpr);
     }
 
     @Override
