@@ -1,17 +1,18 @@
 package ast.expr;
 
 import ast.CodeVisitor;
+import ast.Const;
 
-public class ConstExpr implements Expr {
-    public Double value;
+public class ConstExpr implements Expr
+{
+    public Const value;
 
-    public ConstExpr(Double value) {
+    public ConstExpr(Const value) {
         this.value = value;
     }
 
     @Override
-    public Double accept(CodeVisitor v) {
+    public Const accept(CodeVisitor v) {
         return v.visit(this);
     }
-
 }
