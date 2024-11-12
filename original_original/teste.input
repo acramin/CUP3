@@ -13,11 +13,13 @@ while ( x > 0){
     x = x - 1;
 }
 
+print("Antes do escopo: " + x);
+
 {
     x = 4;
-    print(x);
+    print("Dentro do escopo: " + x);
     a = "teste";
-    print(" 'a' vale " + a);
+    print(" A variável 'a' vale " + a);
 }
 
-print(" isso aqui nao deveria ser "  + x);
+print("Fora do escopo: "  + x);

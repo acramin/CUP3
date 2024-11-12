@@ -78,7 +78,7 @@ public class Interpreter implements CodeVisitor {
 
     @Override
     public Const visit(IdExpr e) {
-        IdExpr idExpr = Interpreter.symbolTable.get(e.name);
+        IdExpr idExpr = Interpreter.symbolTable.lookupSymbol(e.name);
         if(idExpr == null) {
                 System.err.println("Erro: variável \"" + e.name +
                         "\" não inicializada!");
@@ -260,7 +260,7 @@ public class Interpreter implements CodeVisitor {
     public void visit(AssignmentCommand c) {
         Const value = c.expr.accept(this);
         IdExpr idExpr = new IdExpr(c.id, value);
-        Interpreter.symbolTable.put(c.id, idExpr);
+        Interpreter.symbolTable.assignSymbol(c.id, idExpr);
     }
 
     @Override
@@ -294,8 +294,8 @@ public class Interpreter implements CodeVisitor {
 
     @Override
     public void visit(CommandBlock cb) {
-        symbolTable.push();
+        Interpreter.symbolTable.enterScope();
         cb.getCommandList().accept(this);
-        symbolTable.pop();
+        Interpreter.symbolTable.exitScope();
     }
 }

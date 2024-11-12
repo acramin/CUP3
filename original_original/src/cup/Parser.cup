@@ -87,11 +87,7 @@ command ::= assignment_command:a SEMI
         :}
     ;
 
-command_block ::= LBRACE command_list:cl RBRACE
-        {:
-            RESULT = new CommandBlock(cl);;
-        :}
-    ;
+command_block ::= LBRACE command_list:cl {: RESULT = new CommandBlock(cl); :} RBRACE ;
 
 while_command ::= WHILE LPAREN bool_expr:e RPAREN command:c
         {:
