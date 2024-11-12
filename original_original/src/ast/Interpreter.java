@@ -2,27 +2,8 @@ package ast;
 
 import java.util.HashMap;
 
-import ast.command.AssignmentCommand;
-import ast.command.CommandList;
-import ast.command.IfCommand;
-import ast.command.PrintCommand;
-import ast.command.WhileCommand;
-import ast.expr.CosExpr;
-import ast.expr.DivExpr;
-import ast.expr.IdExpr;
-import ast.expr.LEExpr;
-import ast.expr.LTExpr;
-import ast.expr.ModExpr;
-import ast.expr.DoubleConstExpr;
-import ast.expr.ExpExpr;
-import ast.expr.GEExpr;
-import ast.expr.GTExpr;
-import ast.expr.MulExpr;
-import ast.expr.NegatedExpr;
-import ast.expr.PiExpr;
-import ast.expr.SinExpr;
-import ast.expr.SubExpr;
-import ast.expr.SumExpr;
+import ast.command.*;
+import ast.expr.*;
 
 public class Interpreter implements CodeVisitor {
     // symbolTable é a tabela de símbolos
@@ -59,7 +40,7 @@ public class Interpreter implements CodeVisitor {
     }
 
     @Override
-    public Double visit(DoubleConstExpr e) {
+    public Double visit(ConstExpr e) {
         return e.value;
     }
 

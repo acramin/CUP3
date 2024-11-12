@@ -7,6 +7,12 @@ public class IfCommand implements Command {
     public BoolExpr boolExpr;
     public Command command, elseCommand;
 
+    public IfCommand(BoolExpr boolExpr, Command command) {
+        this.boolExpr = boolExpr;
+        this.command = command;
+        this.elseCommand = null;
+    }
+
     public IfCommand(BoolExpr boolExpr, Command command, Command elseCommand) {
         this.boolExpr = boolExpr;
         this.command = command;

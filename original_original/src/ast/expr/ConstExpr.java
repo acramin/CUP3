@@ -2,10 +2,10 @@ package ast.expr;
 
 import ast.CodeVisitor;
 
-public class DoubleConstExpr implements Expr {
+public class ConstExpr implements Expr {
     public Double value;
 
-    public DoubleConstExpr(Double value) {
+    public ConstExpr(Double value) {
         this.value = value;
     }
 
