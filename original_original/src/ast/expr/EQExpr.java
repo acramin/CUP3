@@ -2,7 +2,8 @@ package ast.expr;
 
 import ast.CodeVisitor;
 
-public class EQExpr implements BoolExpr {
+public class EQExpr implements BoolExpr
+{
     public Expr e1;
     public Expr e2;
 
@@ -15,5 +16,4 @@ public class EQExpr implements BoolExpr {
     public Boolean accept(CodeVisitor v) {
         return v.visit(this);
     }
-
 }

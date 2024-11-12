@@ -1,6 +1,7 @@
 package ast.expr;
 
 import ast.CodeVisitor;
+import ast.Const;
 
 public class ModExpr implements Expr {
     public Expr e1, e2;
@@ -11,7 +12,7 @@ public class ModExpr implements Expr {
     }
 
     @Override
-    public Double accept(CodeVisitor v) {
+    public Const accept(CodeVisitor v) {
         return v.visit(this);
     }
 }

@@ -1,6 +1,7 @@
 package ast.expr;
 
 import ast.CodeVisitor;
+import ast.Const;
 
 public class PiExpr implements Expr {
     public Double value;
@@ -10,7 +11,7 @@ public class PiExpr implements Expr {
     }
 
     @Override
-    public Double accept(CodeVisitor v) {
+    public Const accept(CodeVisitor v) {
         return v.visit(this);
     }
 }

@@ -58,7 +58,7 @@ string = \"([^\"\\\\]*(\\\\.[^\"\\\\]*)*)\"
 "PI"        { return symbol(sym.PI, Math.PI); }
 {number}    { return symbol(sym.NUMBER, Double.valueOf(yytext())); }
 {identifier} { return symbol(sym.ID, yytext()); }
-{string}    { return symbol(sym.STRING, yytext()); }
+{string}    { return symbol(sym.STRING, yytext().substring(1, yytext().length()-1)); }
 {ws}        {/* Ignore */}
 .           { throw new Error("Simbolo inválido detectado: \"" + yycharat(0) +
               "\" ( linha: " +  yyline + ", coluna: " + yycolumn + ")"); }

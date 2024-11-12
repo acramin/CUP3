@@ -1,38 +1,81 @@
 package ast;
 
-import java.util.HashMap;
-
 import ast.command.*;
 import ast.expr.*;
 
 public class Interpreter implements CodeVisitor {
     // symbolTable é a tabela de símbolos
-    private static HashMap<String, IdExpr> symbolTable = new HashMap<>();
+    private static SymbolTable symbolTable = new SymbolTable();
 
+    // expressão
     @Override
-    public Double visit(SumExpr e) {
-        return e.e1.accept(this) + e.e2.accept(this);
+    public Const visit(SumExpr e) {
+        Const c1 = e.e1.accept(this);
+        Const c2 = e.e2.accept(this);
+        if(c1.getType() == Type.NUMBER && c2.getType() == Type.NUMBER) {
+            return new Const((Double)c1.getValue() + (Double)c2.getValue(), Type.NUMBER);
+        }
+        else if(c1.getType() == Type.STRING || c2.getType() == Type.STRING) {
+            return new Const(c1.getValue().toString() + c2.getValue().toString(), Type.STRING);
+        }
+        else {
+            System.err.println("Erro: tipos incompatíveis!");
+            return new Const(null, null);
+            // return null;
+        }
     }
 
     @Override
-    public Double visit(SubExpr e) {
-        return e.e1.accept(this) - e.e2.accept(this);
+    public Const visit(SubExpr e) {
+        Const c1 = e.e1.accept(this);
+        Const c2 = e.e2.accept(this);
+        if(c1.getType() == Type.NUMBER && c2.getType() == Type.NUMBER) {
+            return new Const((Double)c1.getValue() - (Double)c2.getValue(), Type.NUMBER);
+        }
+        else {
+            System.err.println("Erro: tipos incompatíveis!");
+            return new Const(null, null);
+            // return null;
+        }
     }
 
     @Override
-    public Double visit(MulExpr e) {
-        return e.e1.accept(this) * e.e2.accept(this);
+    public Const visit(MulExpr e) {
+        Const c1 = e.e1.accept(this);
+        Const c2 = e.e2.accept(this);
+        if(c1.getType() == Type.NUMBER && c2.getType() == Type.NUMBER) {
+            return new Const((Double)c1.getValue() * (Double)c2.getValue(), Type.NUMBER);
+        }
+        else {
+            System.err.println("Erro: tipos incompatíveis!");
+            return new Const(null, null);
+            // return null;
+        }
     }
 
     @Override
-    public Double visit(DivExpr e) {
-        return e.e1.accept(this) / e.e2.accept(this);
+    public Const visit(DivExpr e) {
+        Const c1 = e.e1.accept(this);
+        Const c2 = e.e2.accept(this);
+        if(c1.getType() == Type.NUMBER && c2.getType() == Type.NUMBER) {
+            if((Double)c2.getValue() == 0) {
+                System.err.println("Erro: divisão por zero!");
+                return new Const(null, null);
+                // return null;
+            }
+            return new Const((Double)c1.getValue() / (Double)c2.getValue(), Type.NUMBER);
+        }
+        else {
+            System.err.println("Erro: tipos incompatíveis!");
+            return new Const(null, null);
+            // return null;
+        }
     }
 
     @Override
-    public Double visit(IdExpr e) {
+    public Const visit(IdExpr e) {
         IdExpr idExpr = Interpreter.symbolTable.get(e.name);
-        if( idExpr == null ) {
+        if(idExpr == null) {
                 System.err.println("Erro: variável \"" + e.name +
                         "\" não inicializada!");
         }
@@ -40,83 +83,170 @@ public class Interpreter implements CodeVisitor {
     }
 
     @Override
-    public Double visit(ConstExpr e) {
+    public Const visit(ConstExpr e) {
         return e.value;
     }
 
     @Override
-    public Double visit(NegatedExpr e) {
-        return -e.expr.accept(this);
+    public Const visit(NegatedExpr e) {
+        Const value = e.expr.accept(this);
+        if(value.getType() == Type.NUMBER) {
+            return new Const(-(Double)value.getValue(), Type.NUMBER);
+        }
+        else {
+            System.err.println("Erro: tipos incompatíveis!");
+            return new Const(null, null);
+            // return null;
+        }
     }
 
     @Override
-    public Double visit(ModExpr e) {
-        return e.e1.accept(this) % e.e2.accept(this);
+    public Const visit(ModExpr e) {
+        Const c1 = e.e1.accept(this);
+        Const c2 = e.e2.accept(this);
+        if(c1.getType() == Type.NUMBER && c2.getType() == Type.NUMBER) {
+            if((Double)c2.getValue() == 0) {
+                System.err.println("Erro: divisão por zero!");
+                return new Const(null, null);
+                // return null;
+            }
+            return new Const((Double)c1.getValue() % (Double)c2.getValue(), Type.NUMBER);
+        }
+        else {
+            System.err.println("Erro: tipos incompatíveis!");
+            return new Const(null, null);
+            // return null;
+        }
     }
 
     @Override
-    public Double visit(ExpExpr e) {
-        return Math.pow(e.e1.accept(this), e.e2.accept(this));
+    public Const visit(ExpExpr e) {
+        Const c1 = e.e1.accept(this);
+        Const c2 = e.e2.accept(this);
+        if(c1.getType() == Type.NUMBER && c2.getType() == Type.NUMBER) {
+            return new Const(Math.pow((Double)c1.getValue(), (Double)c2.getValue()), Type.NUMBER);
+        }
+        else {
+            System.err.println("Erro: tipos incompatíveis!");
+            return new Const(null, null);
+            // return null;
+        }
     }
 
     @Override
-    public Double visit(SinExpr e) {
-        return Math.sin(e.expr.accept(this));
+    public Const visit(SinExpr e) {
+        Const value = e.expr.accept(this);
+        if(value.getType() == Type.NUMBER) {
+            return new Const(Math.sin((Double)value.getValue()), Type.NUMBER);
+        }
+        else {
+            System.err.println("Erro: tipos incompatíveis!");
+            return new Const(null, null);
+            // return null;
+        }
     }
 
     @Override
-    public Double visit(CosExpr e) {
-        return Math.cos(e.expr.accept(this));
+    public Const visit(CosExpr e) {
+        Const value = e.expr.accept(this);
+        if(value.getType() == Type.NUMBER) {
+            return new Const(Math.cos((Double)value.getValue()), Type.NUMBER);
+        }
+        else {
+            System.err.println("Erro: tipos incompatíveis!");
+            return new Const(null, null);
+            // return null;
+        }
     }
 
     @Override
-    public Double visit(PiExpr e) {
-        return e.value;
+    public Const visit(PiExpr e) {
+        return new Const(e.value, Type.NUMBER);
     }
 
+
+    // operadores relacionais
     @Override
     public Boolean visit(GTExpr e) {
-        Double v1 = e.e1.accept(this);
-        Double v2 = e.e2.accept(this);
-        return v1 > v2;
+        Const v1 = e.e1.accept(this);
+        Const v2 = e.e2.accept(this);
+        if(v1.getType() == Type.NUMBER && v2.getType() == Type.NUMBER) {
+            return (Double)v1.getValue() > (Double)v2.getValue();
+        }
+        else {
+            System.err.println("Erro: tipos incompatíveis!");
+            return false;
+        }
     }
 
     @Override
     public Boolean visit(LTExpr e) {
-        Double v1 = e.e1.accept(this);
-        Double v2 = e.e2.accept(this);
-        return v1 < v2;
+        Const v1 = e.e1.accept(this);
+        Const v2 = e.e2.accept(this);
+        if(v1.getType() == Type.NUMBER && v2.getType() == Type.NUMBER) {
+            return (Double)v1.getValue() < (Double)v2.getValue();
+        }
+        else {
+            System.err.println("Erro: tipos incompatíveis!");
+            return false;
+        }
     }
 
     @Override
     public Boolean visit(GEExpr e) {
-        Double v1 = e.e1.accept(this);
-        Double v2 = e.e2.accept(this);
-        return v1 >= v2;
+        Const v1 = e.e1.accept(this);
+        Const v2 = e.e2.accept(this);
+        if(v1.getType() == Type.NUMBER && v2.getType() == Type.NUMBER) {
+            return (Double)v1.getValue() >= (Double)v2.getValue();
+        }
+        else {
+            System.err.println("Erro: tipos incompatíveis!");
+            return false;
+        }
     }
 
 
     @Override
     public Boolean visit(LEExpr e) {
-        Double v1 = e.e1.accept(this);
-        Double v2 = e.e2.accept(this);
-        return v1 <= v2;
+        Const v1 = e.e1.accept(this);
+        Const v2 = e.e2.accept(this);
+        if(v1.getType() == Type.NUMBER && v2.getType() == Type.NUMBER) {
+            return (Double)v1.getValue() <= (Double)v2.getValue();
+        }
+        else {
+            System.err.println("Erro: tipos incompatíveis!");
+            return false;
+        }
     }
 
     @Override
     public Boolean visit(ast.expr.EQExpr e) {
-        Double v1 = e.e1.accept(this);
-        Double v2 = e.e2.accept(this);
-        return v1.equals(v2);
+        Const v1 = e.e1.accept(this);
+        Const v2 = e.e2.accept(this);
+        if(v1.getType() == Type.NUMBER && v2.getType() == Type.NUMBER) {
+            return ((Double)v1.getValue()).equals((Double)v2.getValue());
+        }
+        else {
+            System.err.println("Erro: tipos incompatíveis!");
+            return false;
+        }
     }
 
     @Override
     public Boolean visit(ast.expr.NEExpr e) {
-        Double v1 = e.e1.accept(this);
-        Double v2 = e.e2.accept(this);
-        return !v1.equals(v2);
+        Const v1 = e.e1.accept(this);
+        Const v2 = e.e2.accept(this);
+        if(v1.getType() == Type.NUMBER && v2.getType() == Type.NUMBER) {
+            return !((Double)v1.getValue()).equals((Double)v2.getValue());
+        }
+        else {
+            System.err.println("Erro: tipos incompatíveis!");
+            return false;
+        }
     }
 
+
+    // comandos
     @Override
     public void visit(PrintCommand c) {
         System.out.println(">>> " + c.expr.accept(this));
@@ -124,7 +254,7 @@ public class Interpreter implements CodeVisitor {
 
     @Override
     public void visit(AssignmentCommand c) {
-        Double value = c.expr.accept(this);
+        Const value = c.expr.accept(this);
         IdExpr idExpr = new IdExpr(c.id, value);
         Interpreter.symbolTable.put(c.id, idExpr);
     }
@@ -156,5 +286,12 @@ public class Interpreter implements CodeVisitor {
             cl.command.accept(this);
             cl = cl.commandList;
         } while (cl != null);
+    }
+
+    @Override
+    public void visit(CommandBlock cb) {
+        symbolTable.push();
+        cb.getCommandList().accept(this);
+        symbolTable.pop();
     }
 }

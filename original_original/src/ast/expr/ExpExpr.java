@@ -1,8 +1,10 @@
 package ast.expr;
 
 import ast.CodeVisitor;
+import ast.Const;
 
-public class ExpExpr implements Expr {
+public class ExpExpr implements Expr
+{
     public Expr e1, e2;
 
     public ExpExpr(Expr e1, Expr e2) {
@@ -11,7 +13,7 @@ public class ExpExpr implements Expr {
     }
 
     @Override
-    public Double accept(CodeVisitor v) {
+    public Const accept(CodeVisitor v) {
         return v.visit(this);
     }
 }

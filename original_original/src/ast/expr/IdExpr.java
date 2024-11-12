@@ -1,22 +1,23 @@
 package ast.expr;
 
 import ast.CodeVisitor;
+import ast.Const;
 
 public class IdExpr implements Expr {
     public String name;
-    public Double value;
+    public Const value;
 
     public IdExpr(String name) {
-        this(name, 0.0);
+        this(name, null);
     }
 
-    public IdExpr(String name, Double value) {
+    public IdExpr(String name, Const value) {
         this.name = name;
         this.value = value;
     }
 
     @Override
-    public Double accept(CodeVisitor v) {
+    public Const accept(CodeVisitor v) {
         return v.visit(this);
     }
 }

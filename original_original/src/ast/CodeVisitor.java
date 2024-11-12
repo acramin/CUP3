@@ -6,29 +6,29 @@ import ast.command.*;
 public interface CodeVisitor {
 
     // expressões
-    public Double visit(SumExpr e);
+    public Const visit(SumExpr e);
 
-    public Double visit(SubExpr e);
+    public Const visit(SubExpr e);
 
-    public Double visit(MulExpr e);
+    public Const visit(MulExpr e);
 
-    public Double visit(DivExpr e);
+    public Const visit(DivExpr e);
 
-    public Double visit(IdExpr e);
+    public Const visit(IdExpr e);
 
-    public Double visit(ConstExpr e);
+    public Const visit(ConstExpr e);
 
-    public Double visit(NegatedExpr e);
+    public Const visit(NegatedExpr e);
 
-    public Double visit(ModExpr e);
+    public Const visit(ModExpr e);
 
-    public Double visit(ExpExpr e);
+    public Const visit(ExpExpr e);
 
-    public Double visit(SinExpr e);
+    public Const visit(SinExpr e);
 
-    public Double visit(CosExpr e);
+    public Const visit(CosExpr e);
 
-    public Double visit(PiExpr e);
+    public Const visit(PiExpr e);
 
 
     // operadores relacionais
@@ -56,5 +56,5 @@ public interface CodeVisitor {
 
     public void visit(CommandList e);
 
-    
+    public void visit(CommandBlock cb);
 }

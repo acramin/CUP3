@@ -5,6 +5,7 @@ import java.util.HashMap;
 import ast.expr.*;
 import ast.Interpreter;
 import ast.command.*;
+import ast.*;
 
 // Definição dos terminais
 terminal            SEMI, PLUS, MINUS, TIMES, DIVIDE, MOD, PRINT;
@@ -20,14 +21,13 @@ terminal String     STRING;
 non terminal            program;
 non terminal Expr       expr;
 non terminal BoolExpr   bool_expr;
-non terminal Command    command;
-non terminal Command    command_part;
+non terminal Command    command, command_part;
+non terminal CommandList command_list;
+non terminal CommandBlock     command_block;
 non terminal PrintCommand       print_command;
 non terminal AssignmentCommand  assignment_command;
 non terminal IfCommand          if_command;
 non terminal WhileCommand       while_command;
-non terminal CommandList        command_list;
-non terminal CommandList        command_block;
 
 // Precedência e associatividade dos operadores
 precedence nonassoc ELSE;
@@ -89,7 +89,7 @@ command ::= assignment_command:a SEMI
 
 command_block ::= LBRACE command_list:cl RBRACE
         {:
-            RESULT = cl;
+            RESULT = new CommandBlock(cl);;
         :}
     ;
 
@@ -113,7 +113,7 @@ print_command ::= PRINT LPAREN expr:e RPAREN
 
 if_command ::= IF LPAREN bool_expr:e RPAREN command:c
         {:
-            RESULT = new IfCommand(e, c, null);
+            RESULT = new IfCommand(e, c);
         :} 
     | IF LPAREN bool_expr:e RPAREN command:c ELSE command:c2
         {:
@@ -138,7 +138,9 @@ expr ::= expr:e1 PLUS expr:e2
     | LPAREN expr:e RPAREN 
         {: RESULT = e; :}
     | NUMBER:n 
-        {: RESULT = new DoubleConstExpr(n); :}
+        {: RESULT = new ConstExpr(new Const(n, Type.NUMBER)); :}
+    | STRING:s 
+        {: RESULT = new ConstExpr(new Const(s, Type.STRING)); :}
     | ID:id 
         {: 
             RESULT = new IdExpr(id);
