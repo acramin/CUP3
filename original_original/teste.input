@@ -13,4 +13,12 @@ while ( x > 0){
     x = x - 1;
 }
 
+a = "palavra";
+
+{
+    a = "teste";
+    print(a);
+}
+
 print(x);
+print(a);

@@ -249,7 +249,7 @@ public class Interpreter implements CodeVisitor {
     // comandos
     @Override
     public void visit(PrintCommand c) {
-        System.out.println(">>> " + c.expr.accept(this));
+        System.out.println(">>> " + c.expr.accept(this).getValue().toString());
     }
 
     @Override
