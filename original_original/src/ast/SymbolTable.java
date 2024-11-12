@@ -34,7 +34,7 @@ public class SymbolTable
             }
         }
         stack.peek().put(key, e);
-        printStack();
+        //printStack();
     }
 
     public IdExpr get(String key) {

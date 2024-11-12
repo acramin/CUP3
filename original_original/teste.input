@@ -17,8 +17,7 @@ while ( x > 0){
     x = 4;
     print(x);
     a = "teste";
-    print(a);
+    print(" 'a' vale " + a);
 }
 
-print(x);
-print(a);
+print(" isso aqui nao deveria ser "  + x);
