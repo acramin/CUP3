@@ -5,7 +5,11 @@ import ast.expr.*;
 
 public class Interpreter implements CodeVisitor {
     // symbolTable é a tabela de símbolos
-    private static SymbolTable symbolTable = new SymbolTable();
+    private static SymbolTable symbolTable;
+
+    public Interpreter() {
+        symbolTable = new SymbolTable();
+    }
 
     // expressão
     @Override

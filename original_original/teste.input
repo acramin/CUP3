@@ -13,9 +13,9 @@ while ( x > 0){
     x = x - 1;
 }
 
-a = "palavra";
-
 {
+    x = 4;
+    print(x);
     a = "teste";
     print(a);
 }

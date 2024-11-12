@@ -9,18 +9,21 @@ public class SymbolTable
     private Stack<HashMap<String, IdExpr>> stack;
 
     public SymbolTable() {
-        stack = new Stack<HashMap<String, IdExpr>>();
-        stack.push(new HashMap<String, IdExpr>());
+        stack = new Stack<>();
+        stack.push(new HashMap<>());
+        //System.err.println("SymbolTable add: " + stack.size());
     }
 
     public void push() {
-        stack.push(new HashMap<String, IdExpr>());
+        stack.push(new HashMap<>());
+        //System.err.println("SymbolTable add: " + stack.size());
     }
 
     public void pop() {
         if (stack.size() > 1) {
             stack.pop();
         }
+        //System.err.println("SymbolTable remove: " + stack.size());
     }
 
     public void put(String key, IdExpr e) {
@@ -31,6 +34,7 @@ public class SymbolTable
             }
         }
         stack.peek().put(key, e);
+        printStack();
     }
 
     public IdExpr get(String key) {
@@ -43,8 +47,9 @@ public class SymbolTable
     }
 
     public void printStack() {
-        for (HashMap<String, IdExpr> map : stack) {
-            System.out.println(map);
+        System.out.println("Estado da pilha de escopos:");
+        for (int i = stack.size() - 1; i >= 0; i--) {
+            System.out.println("Escopo " + i + ": " + stack.get(i));
         }
     }
 }
