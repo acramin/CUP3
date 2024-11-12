@@ -20,7 +20,7 @@ public class SymbolTable
     }
 
     public void pop() {
-        if (stack.size() > 1) {
+        if (!stack.isEmpty() ){
             stack.pop();
         }
         //System.err.println("SymbolTable remove: " + stack.size());
